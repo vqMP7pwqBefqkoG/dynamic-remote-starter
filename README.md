@@ -23,7 +23,7 @@ Dynamic Remote Starterは、Webブラウザを通じてWindowsのバッチファ
 
 1.  このリポジトリをクローンします。
     ```bash
-    git clone https://github.com/your-username/dynamic-remote-starter.git
+    git clone https://github.com/vqMP7pwqBefqkoG/dynamic-remote-starter
     cd dynamic-remote-starter
     ```
 2.  必要なPythonライブラリをインストールします。
