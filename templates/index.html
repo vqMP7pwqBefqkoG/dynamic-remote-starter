@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Remote Starter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body data-secret-path="{{ SECRET_PATH }}">
+    <div class="container">
+        <h1>Dynamic Remote Starter</h1>
+        <div id="message-box" class="message"></div>
+        <div id="app-list"></div>
+        <details class="card">
+            <summary><h2>Add New Application</h2></summary>
+            <form id="add-app-form">
+                <div class="form-grid-add-app">
+                    <input type="text" id="app-name" placeholder="Application Name (e.g., MyServer)" required>
+                    <input type="number" id="app-port" placeholder="Port (e.g., 8888)">
+                </div>
+                <input type="text" id="app-path" placeholder="Full Path to .bat file (e.g., C:\path\to\start.bat)" required>
+                <p class="help-text">Hint: In Windows, you can Shift + Right-click on a file and select "Copy as path".</p>
+                <div class="add-form-btn-container">
+                    <button type="submit" class="add-form-btn">Add</button>
+                </div>
+            </form>
+        </details>
+    </div>
+    <footer class="footer-container">
+        <div class="theme-switcher">
+            <label for="theme-toggle">🌙</label>
+            <input type="checkbox" id="theme-toggle">
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

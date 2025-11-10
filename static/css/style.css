@@ -1,0 +1,128 @@
+:root {
+    --bg-color: #f0f2f5; --card-bg: #ffffff; --text-color: #333; --border-color: #e9ecef;
+    --primary-color: #007bff; --primary-hover: #0056b3; --danger-color: #dc3545; --danger-hover: #b02a37;
+    --secondary-color: #6c757d; --secondary-hover: #545b62; --success-color: #28a745;
+    --icon-btn-bg: #e9ecef; --icon-btn-bg-hover: #d3d9df;
+}
+
+body.dark-mode {
+    --bg-color: #1a1a1a; --card-bg: #2c2c2c; --text-color: #f0f2f5; --border-color: #3a3a3a;
+    --icon-btn-bg: #404040; --icon-btn-bg-hover: #505050;
+}
+
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; }
+.container { max-width: 800px; margin: 0 auto; padding: 1em; }
+h1 { text-align: center; margin: 0.5em 0 1em 0; font-size: clamp(1.5em, 5vw, 1.8em); }
+.footer-container { max-width: 800px; margin: 0 auto; padding: 1em; display: flex; justify-content: flex-end; align-items: center; }
+.theme-switcher { display: flex; align-items: center; }
+.theme-switcher label { font-size: 1.5em; cursor: pointer; }
+#theme-toggle { display: none; }
+.card { background: var(--card-bg); padding: 1em; margin-bottom: 1em; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid var(--border-color); }
+h2 { margin-top: 0; font-size: clamp(1em, 4vw, 1.2em); color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5em; margin-bottom: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-link, .app-link:visited {
+    text-decoration: none;
+    color: inherit;
+}
+.status-container { display: flex; align-items: center; gap: 0.5em; }
+.status { font-weight: bold; padding: 0.2em 0.6em; border-radius: 1em; color: white; font-size: 0.8em; }
+.status-running { background-color: var(--success-color); }
+.status-stopped { background-color: var(--danger-color); }
+.status-unknown { background-color: var(--secondary-color); }
+.card-footer { display: flex; justify-content: space-between; align-items: center; }
+.buttons { display: flex; gap: 0.75em; }
+.icon-btn { background-color: var(--icon-btn-bg); color: var(--text-color); border: none; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1em; cursor: pointer; transition: all 0.2s ease; }
+.icon-btn:hover { background-color: var(--icon-btn-bg-hover); transform: scale(1.1); }
+.start-btn { color: var(--primary-color); }
+.start-btn.disabled { color: var(--secondary-color); cursor: not-allowed; opacity: 0.5; }
+.stop-btn { color: var(--secondary-color); }
+.stop-btn.active { color: var(--danger-color); }
+.delete-btn { color: #fff; }
+.message { margin-top: 1.5em; padding: 1em; background-color: var(--border-color); border-radius: 8px; text-align: center; display: none; word-break: break-all; }
+#app-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1em; }
+.form-grid-add-app { display: grid; grid-template-columns: 2fr 1fr; gap: 1em; margin-bottom: 1em; }
+input[type="text"], input[type="number"] { padding: 0.8em; border: 1px solid var(--border-color); border-radius: 6px; font-size: 1em; width: 100%; box-sizing: border-box; background-color: var(--card-bg); color: var(--text-color); }
+.help-text { font-size: 0.85em; color: #6c757d; margin-top: 0.5em; text-align: center; }
+.add-form-btn-container { text-align: right; margin-top: 1em; }
+.add-form-btn { padding: 0.8em 1.2em; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; font-weight: 600; color: white; transition: all 0.2s ease; background-color: var(--primary-color); }
+.add-form-btn:hover { background-color: var(--primary-hover); }
+
+/* Drag and Drop Styles */
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+.card.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+.drag-over {
+    border-style: dashed;
+    border-color: var(--primary-color);
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Accordion Styles */
+details.card {
+    padding: 0; /* Reset padding for the details element itself */
+}
+details > summary {
+    padding: 1em;
+    cursor: pointer;
+    list-style: none; /* Remove default marker */
+}
+details > summary::-webkit-details-marker {
+    display: none; /* Remove default marker for Chrome/Safari */
+}
+details > summary::before {
+    content: '▶';
+    margin-right: 0.5em;
+    font-size: 0.8em;
+    display: inline-block;
+    transition: transform 0.2s;
+}
+details[open] > summary::before {
+    transform: rotate(90deg);
+}
+details > summary > h2 {
+    display: inline; /* Allow h2 to be on the same line as the marker */
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+details > form {
+    padding: 0 1em 1em 1em; /* Add padding to the form inside */
+    border-top: 1px solid var(--border-color);
+    margin-top: 1em;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.3em; /* Further reduced padding */
+    }
+    #app-list {
+        gap: 0.3em; /* Further reduced gap */
+    }
+    .card {
+        padding: 0.6em; /* Further reduced padding */
+    }
+    .icon-btn {
+        width: 30px; /* Slightly smaller buttons */
+        height: 30px;
+        font-size: 0.9em;
+    }
+    .buttons {
+        gap: 0.3em; /* Further reduced gap */
+    }
+    h2 {
+        font-size: clamp(0.9em, 3.5vw, 1.1em); /* Even smaller h2 on very small screens */
+    }
+}
+
+@media (max-width: 360px) { /* For very small screens, switch to single column */
+    #app-list {
+        grid-template-columns: 1fr;
+        gap: 0.5em; /* A bit more gap for single column */
+    }
+    .card {
+        padding: 0.8em; /* Slightly more padding for single column */
+    }
+}
