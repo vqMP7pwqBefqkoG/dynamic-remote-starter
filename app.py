@@ -249,6 +249,33 @@ def stop_app(app_name):
     else:
         return jsonify({"error": message}), 500
 
+@app.route(f'/{SECRET_PATH}/stop-all', methods=['POST'])
+def stop_all_apps():
+    """実行中のすべてのアプリケーションを停止する"""
+    stopped_apps = []
+    failed_apps = []
+    
+    # processes辞書のキーのリストをコピーしてイテレートする
+    # _stop_processが辞書を編集中にイテレートエラーを防ぐため
+    running_apps = list(processes.keys())
+    
+    if not running_apps:
+        return jsonify({"message": "No applications are currently running."}), 200
+
+    for app_name in running_apps:
+        success, message = _stop_process(app_name)
+        if success:
+            stopped_apps.append(app_name)
+        else:
+            failed_apps.append({"name": app_name, "reason": message})
+            
+    response = {
+        "message": "Stop all command executed.",
+        "stopped": stopped_apps,
+        "failed": failed_apps
+    }
+    return jsonify(response), 200
+
 if __name__ == '__main__':
     print("--- Dynamic Remote Starter Server ---")
     print(f"1. IMPORTANT: Edit 'app.py' and change SECRET_PATH to a unique value.")

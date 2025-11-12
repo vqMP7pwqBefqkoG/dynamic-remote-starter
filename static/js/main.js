@@ -273,9 +273,33 @@ function toggleTheme() {
 
 themeToggle.addEventListener('change', toggleTheme);
 
+function stopAllApps() {
+    if (!confirm('Are you sure you want to stop all running applications?')) {
+        return;
+    }
+    apiFetch(`/${SECRET_PATH}/stop-all`, { method: 'POST' })
+        .then(data => {
+            // Display a more detailed message from the stop-all endpoint
+            const messageBox = document.getElementById('message-box');
+            let summary = `Stopped: ${data.stopped.join(', ') || 'None'}. `;
+            if (data.failed && data.failed.length > 0) {
+                const failedReasons = data.failed.map(f => `${f.name} (${f.reason})`).join('; ');
+                summary += `Failed: ${failedReasons}`;
+            }
+            messageBox.textContent = summary;
+            messageBox.style.display = 'block';
+            
+            setTimeout(updateStatus, 500);
+        })
+        .catch(err => console.error('Failed to stop all apps', err));
+}
+
 
 // --- Initial Load ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Stop All button
+    document.getElementById('stop-all-btn').addEventListener('click', stopAllApps);
+
     // Load theme
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
