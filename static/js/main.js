@@ -72,7 +72,7 @@ async function updateAppList() {
         const data = await apiFetch('/apps');
         const appList = document.getElementById('app-list');
         appList.innerHTML = '';
-        
+
         const apps = data.apps || {};
         const order = data.order || [];
 
@@ -149,7 +149,7 @@ function initDragAndDrop() {
     appList.addEventListener('dragstart', e => {
         const targetCard = e.target.closest('.card');
         if (!targetCard) return;
-        
+
         draggedItem = targetCard;
         // Use a timeout to allow the browser to create the drag image
         setTimeout(() => {
@@ -203,7 +203,7 @@ function initDragAndDrop() {
 
             // Get new order and save it
             const newOrder = [...parent.querySelectorAll('.card')].map(card => card.dataset.appName);
-            
+
             apiFetch(`/${SECRET_PATH}/save-order`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -249,29 +249,7 @@ document.getElementById('add-app-form').addEventListener('submit', async (e) => 
     }
 });
 
-// --- Theme Switching ---
-const themeToggle = document.getElementById('theme-toggle');
-const themeLabel = document.querySelector('.theme-switcher label');
-
-function applyTheme(isDark) {
-    if (isDark) {
-        document.body.classList.add('dark-mode');
-        themeLabel.textContent = '☀️';
-        themeToggle.checked = true;
-    } else {
-        document.body.classList.remove('dark-mode');
-        themeLabel.textContent = '🌙';
-        themeToggle.checked = false;
-    }
-}
-
-function toggleTheme() {
-    const isDark = themeToggle.checked;
-    applyTheme(isDark);
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-
-themeToggle.addEventListener('change', toggleTheme);
+// --- Theme Switching Removed (Forced Dark Mode) ---
 
 function stopAllApps() {
     if (!confirm('Are you sure you want to stop all running applications?')) {
@@ -288,7 +266,7 @@ function stopAllApps() {
             }
             messageBox.textContent = summary;
             messageBox.style.display = 'block';
-            
+
             setTimeout(updateStatus, 500);
         })
         .catch(err => console.error('Failed to stop all apps', err));
@@ -300,14 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Stop All button
     document.getElementById('stop-all-btn').addEventListener('click', stopAllApps);
 
-    // Load theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        applyTheme(savedTheme === 'dark');
-    } else {
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark);
-    }
+    // Theme handling removed (forced dark mode)
 
     // Init Drag and Drop
     initDragAndDrop();
