@@ -60,6 +60,7 @@ function createAppCard(appName, appInfo) {
                 <div class="buttons">
                     <button class="icon-btn start-btn" onclick="controlApp('${appName}', 'start')" title="Start">&#9654;</button>
                     <button class="icon-btn stop-btn" onclick="controlApp('${appName}', 'stop')" title="Stop">&#9632;</button>
+                    <button class="icon-btn log-btn" onclick="window.open('/' + SECRET_PATH + '/log/${appName}', '_blank')" title="View Log">&#128220;</button>
                     <button class="icon-btn delete-btn" onclick="deleteApp('${appName}')" title="Delete">&#128465;</button>
                 </div>
             </div>

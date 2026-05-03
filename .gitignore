@@ -16,3 +16,6 @@ batch_files/
 .env
 venv/
 env/
+
+# Logs
+logs/

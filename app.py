@@ -226,8 +226,18 @@ def start_app(app_name):
         if not os.path.exists(abs_path):
             return jsonify({"error": f"Batch file not found: {abs_path}"}), 500
 
-        command = ['cmd.exe', '/k', abs_path]
-        proc = subprocess.Popen(command, creationflags=subprocess.CREATE_NEW_CONSOLE, cwd=abs_cwd)
+        command = ['cmd.exe', '/c', abs_path]
+        
+        log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+        os.makedirs(log_dir, exist_ok=True)
+        log_file_path = os.path.join(log_dir, f"{app_name}.log")
+        log_file = open(log_file_path, 'w', encoding='utf-8')
+        
+        try:
+            proc = subprocess.Popen(command, creationflags=subprocess.CREATE_NO_WINDOW, cwd=abs_cwd, stdout=log_file, stderr=subprocess.STDOUT)
+        except Exception as e:
+            log_file.close()
+            raise e
         
         processes[app_name] = proc.pid
         save_json_file(PID_FILE, processes)
@@ -235,6 +245,25 @@ def start_app(app_name):
         return jsonify({"message": f"Started {app_name} with PID: {proc.pid}"}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to start {app_name}: {str(e)}"}), 500
+
+@app.route(f'/{SECRET_PATH}/log/<app_name>')
+def view_log(app_name):
+    """アプリケーションのログを表示する"""
+    if app_name not in app_config['apps']:
+        return "Application not found", 404
+        
+    log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    log_file_path = os.path.join(log_dir, f"{app_name}.log")
+    
+    if not os.path.exists(log_file_path):
+        return "Log file not found. The app might not have been started yet.", 404
+        
+    try:
+        with open(log_file_path, 'r', encoding='utf-8', errors='replace') as f:
+            content = f.read()
+        return content, 200, {'Content-Type': 'text/plain; charset=utf-8'}
+    except Exception as e:
+        return f"Error reading log file: {e}", 500
 
 @app.route(f'/{SECRET_PATH}/stop/<app_name>', methods=['POST'])
 def stop_app(app_name):
